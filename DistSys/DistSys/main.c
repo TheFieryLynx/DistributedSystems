@@ -30,36 +30,54 @@ int main(int argc, char** argv) {
 
     //printf("%d", coordinator_num);
     MPI_Barrier(MPI_COMM_WORLD);
-    MPI_Status status;
-    
-    
+//    
+//    int *baseptr;
+//    MPI_Alloc_mem(1, MPI_INFO_NULL, &baseptr);
+//    baseptr[0] = -1;
+
     //printf("Hello world from rank %d out of %d processors\n", rank, size);
     if (rank != coordinator_num) {
+        
         int message_send = rank;
         int message_get;
-        while(1){
+        
+        MPI_Request request;
+        MPI_Status status;
+        
+        int coordinator_is_alive = 1;
+        while(coordinator_is_alive){
             printf("%d SEND message %d (start)\n", rank, message_send);
             MPI_Send(&message_send, 1, MPI_INT, coordinator_num, 0, MPI_COMM_WORLD);
             printf("%d SEND message (stop)\n", rank);
             
-            
-        
             printf("--- %d RECV message (start)\n", rank);
-            MPI_Recv(&message_get, 1, MPI_INT, coordinator_num, 0, MPI_COMM_WORLD, &status);
-            printf("--- %d RECV message %d (stop)\n", rank, message_get);
+            //MPI_Recv(&message_get, 1, MPI_INT, coordinator_num, 0, MPI_COMM_WORLD, &status);
+            MPI_Irecv(&message_get, 1, MPI_INT, coordinator_num, 0, MPI_COMM_WORLD, &request);
+            int flag = 0;
+            double start = MPI_Wtime();
             
+            while (!flag) {
+                double current_time = MPI_Wtime();
+                MPI_Test(&request, &flag, &status);
+                if (current_time - start > 5) {
+                    printf("proc %d detected that coordinator %d is not responding\n", rank, coordinator_num);
+                    coordinator_is_alive = 0;
+                    break;
+                }
+            }
+            if (coordinator_is_alive) printf("--- %d RECV message %d (stop)\n", rank, message_get);
         }
         
     }
     if (rank == coordinator_num){
         double start = MPI_Wtime();
+        MPI_Status status;
         int message_get;
         int message_send;
-        int i = 30;
         while (1) {
             double current_time = MPI_Wtime();
             //printf("%lf", current_time - start);
-            if (current_time - start < 5){
+            if (current_time - start < 10){
                 printf("--------- %d RECV message (start)\n", rank);
                 MPI_Recv(&message_get, 1, MPI_INT, MPI_ANY_SOURCE, 0, MPI_COMM_WORLD, &status);
                 printf("--------- %d RECV message %d (stop)\n", rank, message_get);
@@ -71,13 +89,14 @@ int main(int argc, char** argv) {
                 printf("----------------- %d SEND message (stop)\n", rank);
                 
             } else {
+                //MPI_Free_mem(baseptr);
                 MPI_Finalize();
+                exit(0);
             }
         }
-                
-        
     }
-
+   
+   
    
 
 
@@ -88,7 +107,12 @@ int main(int argc, char** argv) {
     MPI_Get_processor_name(processor_name, &name_len);
 
     // Print off a hello world message
-    //printf("Hello world from rank %d out of %d processors\n", rank, size);
+    if (rank != coordinator_num) {
+        //printf("Hello world from rank %d out of %d processors\n", rank, size);
     // Finalize the MPI environment.
-    MPI_Finalize();
+        //MPI_Free_mem(baseptr);
+        MPI_Finalize();
+        
+        exit(0);
+    }
 }
