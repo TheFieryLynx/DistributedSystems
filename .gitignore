@@ -1,9 +1,2 @@
-zadira
-zadira.c
-run.sh
-open-mpi/
 .vscode
-DistSys/Build
-DistSys/DerivedData
-DistSys/DistSys.entitlements
-DistSys.xcodeproj
+*.DS_Store
