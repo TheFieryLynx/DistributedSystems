@@ -1,0 +1,7 @@
+terminate called after throwing an instance of 'std::bad_alloc'
+  what():  St9bad_alloc
+<Nov 26 13:32:15.300989> BE_MPI (ERROR): The error message in the job record is as follows:
+<Nov 26 13:32:15.301061> BE_MPI (ERROR):   "killed with signal 6"
+<Nov 26 13:32:15.344289> BE_MPI (ERROR): print_job_errtext() - Job 963311 had 6 RAS events
+<Nov 26 13:32:15.344319> BE_MPI (ERROR): print_job_errtext() - last event: KERN_080C  DDR controller chipkill error count.  Controller 1, chipselect 4  Count=5100243
+<Nov 26 13:32:15.344343> BE_MPI (ERROR): print_job_errtext() - Check the Navigator's job history for complete details

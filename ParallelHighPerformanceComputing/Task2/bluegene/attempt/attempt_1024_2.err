@@ -1,0 +1,8 @@
+<Nov 27 00:10:56.569298> BE_MPI (ERROR): The partition should be in one of the following states:
+<Nov 27 00:10:56.569361> BE_MPI (ERROR):                     FREE ('F')
+<Nov 27 00:10:56.569379> BE_MPI (ERROR):                     CONFIGURING ('A' or 'C' or 'B')
+<Nov 27 00:10:56.569396> BE_MPI (ERROR):                     READY ('I')
+<Nov 27 01:09:46.245854> FE_MPI (ERROR): backend failed while preparing partition with return code 26
+<Nov 27 01:09:46.246010> FE_MPI (ERROR):  - Specified partition is in incompatible state
+<Nov 27 01:09:46.564588> FE_MPI (ERROR): Failure list:
+<Nov 27 01:09:46.564662> FE_MPI (ERROR):   - 1. Specified partition is in incompatible state (failure #26)

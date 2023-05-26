@@ -2,6 +2,9 @@
 #include <stdlib.h>
 #include <iostream>
 #include <vector>
+#include <ctime>
+#include <algorithm>
+#include <cstring>
 
 typedef std::vector<int> VINT; 
 
@@ -153,7 +156,6 @@ int main(int argc, const char* argv[])
 
     VINT v(v1);
 	std::move(v2.begin(), v2.end(), std::back_inserter(v));
-	print(v);
 
     Network(0, p1, 1, p1, p2);
     std::cout << p1 << " " << p2 << " " << 0 << std::endl;
